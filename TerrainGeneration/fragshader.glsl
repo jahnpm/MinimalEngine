@@ -13,15 +13,15 @@ void main()
 {
 	vec4 color;
 
-	if (texID == 0.0)
+	if (texID > -0.5 && texID < 0.5)
 	{
 		color = texture(texture0, texCoord);
 	}
-	else if (texID == 1.0)
+	else if (texID > 0.5 && texID < 1.5)
 	{
 		color = texture(texture1, texCoord);
 	}
-	else if (texID == 2.0)
+	else if (texID > 1.5 && texID < 2.5)
 	{
 		color = texture(texture2, texCoord);
 	}

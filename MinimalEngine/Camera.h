@@ -24,14 +24,10 @@ public:
 	glm::vec3 right;	/**< a vector that points to the right of the camera */
 	glm::vec3 rotation;
 
-
 	float fov;  /**< field of view */
 	float aspectRatio;
 	float nearClip;
 	float farClip;
-
-	glm::vec3 viewSphereCenter;
-	float viewSphereRadius;
 
 	float speed;
 };

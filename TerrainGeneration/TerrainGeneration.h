@@ -6,12 +6,12 @@
 #include "Camera.h"
 #include <vector>
 
-class TestGame :
+class TerrainGeneration :
 	public Game
 {
 public:
 
-	TestGame();
+	TerrainGeneration();
 
 	/* executed once before entering the game loop */
 	void init();
@@ -33,7 +33,7 @@ public:
 	 */
 	float perlinNoise(glm::vec2 position);
 
-	~TestGame();
+	~TerrainGeneration();
 
 	Shader *shader;
 	Cube *cube;
@@ -41,19 +41,13 @@ public:
 
 private:
 
-	void handleUserInput(GLFWwindow *window, float deltaTime);
-
 	glm::vec2 previousMouse;
 
 	float previousTime;
 	int seed;   /**< needed to calculate random Perlin noise */
 	int mapSize;
-	std::vector<std::vector<int>> heightMap;
 
 	glm::mat4 view;
 	glm::mat4 projection;
-
-	float farHeight;
-	float farWidth;
 };
 

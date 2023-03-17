@@ -18,18 +18,22 @@ public:
 
 	void fillVertexBuffer();
 	void fillTextureBuffer();
+	void fillInstanceBuffer();
 	void draw(Shader *shader);
 
 	unsigned int vertexCount;
+	unsigned int instanceCount;
 
 	float *mesh;
 	float *normals;
 	float *textureCoordinates;
+	glm::vec3* instances;
 
 	unsigned int vertexArray;
 	unsigned int vertexBuffer;
 	unsigned int normalBuffer;
 	unsigned int textureBuffer;
+	unsigned int instanceBuffer;
 
 	glm::vec3 position;
 	glm::vec3 rotation;

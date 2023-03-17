@@ -11,12 +11,11 @@ public:
 	Cube(const char *tex0, const char *tex1, const char *tex2);
 	~Cube();
 
-	void updateTextureCoordinatesTriple();
-
+	void buildMesh();
 	void updateTextureCoordinates();
+	void updateTextureCoordinatesTriple();
 	void drawTripleTexture(Shader* shader);
 
-	Texture* texture0;
 	Texture* texture1;
 	Texture* texture2;
 };

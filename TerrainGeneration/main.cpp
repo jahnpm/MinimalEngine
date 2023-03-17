@@ -1,12 +1,12 @@
-#include "TestGame.h"
+#include "TerrainGeneration.h"
 
 int main()
 {
-	TestGame *testGame = new TestGame();
+	TerrainGeneration *terrainGeneration = new TerrainGeneration();
 
-	testGame->run();
+	terrainGeneration->run();
 
-	delete testGame;
+	delete terrainGeneration;
 
 	return 0;
 }

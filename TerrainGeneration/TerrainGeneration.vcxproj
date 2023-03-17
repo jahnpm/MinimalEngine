@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestGame.h" />
+    <ClInclude Include="TerrainGeneration.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TestGame.cpp" />
+    <ClCompile Include="TerrainGeneration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragshader.glsl" />

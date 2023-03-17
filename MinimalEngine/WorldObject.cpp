@@ -11,10 +11,12 @@ WorldObject::WorldObject()
 	textureRepeatCountT = 1.0f;
 	textured = true;
 	texCoordsPerVertex = 2;
+	instanceCount = 0;
 
 	glGenVertexArrays(1, &vertexArray);
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &textureBuffer);
+	glGenBuffers(1, &instanceBuffer);
 }
 
 
@@ -57,6 +59,20 @@ void WorldObject::fillTextureBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void WorldObject::fillInstanceBuffer()
+{
+	glBindVertexArray(vertexArray);
+	glBindBuffer(GL_ARRAY_BUFFER, instanceBuffer);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * instanceCount, instances, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glVertexAttribDivisor(2, 1);
+}
+
 void WorldObject::draw(Shader *shader)
 {
 	glm::mat4 model;
@@ -72,8 +88,15 @@ void WorldObject::draw(Shader *shader)
 	shader->setUniformBool("textured", textured);
 
 	if (textured)
+	{
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture->id);
+	}
 
 	glBindVertexArray(vertexArray);
-	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	
+	if (instanceCount == 0)
+		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	else
+		glDrawArraysInstanced(GL_TRIANGLES, 0, vertexCount, instanceCount);
 }
