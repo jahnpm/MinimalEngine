@@ -4,9 +4,9 @@
 
 TerrainGeneration::TerrainGeneration()
 {
-	screenWidth = 1280;
-	screenHeight = 720;
-	fullScreen = false;
+	screenWidth = 2560;
+	screenHeight = 1440;
+	fullScreen = true;
 }
 
 void TerrainGeneration::init()

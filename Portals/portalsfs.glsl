@@ -22,6 +22,7 @@ out vec4 FragColor;
 
 void main()
 {
+	/*
 	vec3 fpam = fragPos - fpa;
 
 	if (abs(dot(fpam, portal1Norm)) <= 0.01f && textured)
@@ -53,6 +54,7 @@ void main()
 			&& 0 <= dotbcbm2 && dotbcbm2 <= dot(spbc, spbc))
 			discard;
 	}
+	*/
 
 	if (textured)
 		FragColor = texture(tex, texCoord);

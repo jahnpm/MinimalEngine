@@ -6,6 +6,12 @@
 #include "Camera.h"
 #include "Plane.h"
 
+struct PortalSurface
+{
+	Plane* plane;
+	bool hasPortal;
+};
+
 class Portals : public Game
 {
 public:
@@ -18,7 +24,10 @@ private:
 	void init();
 	void update();
 	void draw();
+	void drawPortalContents(int i, Plane* portal1, Plane* portal2, Camera* cam, int clip);
 	void handleUserInput(GLFWwindow *window, float deltaTime);
+	void handlePlayerMovement();
+	void movePortal(Plane* portal);
 	glm::quat getRotationQuat(glm::vec3 v1, glm::vec3 v2, glm::vec3 perp);
 
 	glm::vec2 previousMouse;
@@ -33,15 +42,7 @@ private:
 	Camera *camera;
 
 	Plane *portal1, *portal2;
-	Plane *wallNorth, *wallEast, *wallSouth, *wallWest;
-	Plane *floor, *ceiling;
-
-	glm::vec3 fpa;
-	glm::vec3 fpb;
-	glm::vec3 fpc;
-	glm::vec3 spa;
-	glm::vec3 spb;
-	glm::vec3 spc;
+	PortalSurface portalSurfaces[6];
 
 	int portalDepth;
 };

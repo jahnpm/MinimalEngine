@@ -11,7 +11,6 @@ Portals::Portals()
 void Portals::init()
 {
 	glEnable(GL_STENCIL_TEST);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
 
 	shader = new Shader("portalsvs.glsl", "portalsfs.glsl");
 	glUseProgram(shader->id);
@@ -45,55 +44,74 @@ void Portals::init()
 	portal2->rotationQuaternion = glm::mat4_cast(
 		getRotationQuat(portal2->normal, glm::vec3(0, 0, 1), portal2->up));
 
-	wallNorth = new Plane("wallTexture.jpg");
-	wallNorth->texture->setWrapS(GL_MIRRORED_REPEAT);
-	wallNorth->textureRepeatCountS = 3;
-	wallNorth->updateTextureCoordinates();
-	wallNorth->position = glm::vec3(0, 0, -5);
-	wallNorth->scale = glm::vec3(15, 5, 1);
+	portalSurfaces[0].plane = new Plane("wallTexture.jpg");
+	portalSurfaces[0].plane->texture->setWrapS(GL_MIRRORED_REPEAT);
+	portalSurfaces[0].plane->textureRepeatCountS = 3;
+	portalSurfaces[0].plane->updateTextureCoordinates();
+	portalSurfaces[0].plane->position = glm::vec3(0, 0, -5);
+	portalSurfaces[0].plane->normal = glm::vec3(0, 0, 1);
+	portalSurfaces[0].plane->up = glm::vec3(0, 1, 0);
+	portalSurfaces[0].plane->scale = glm::vec3(15, 5, 1);
+	portalSurfaces[0].hasPortal = false;
 
-	wallEast = new Plane("wallTexture.jpg");
-	wallEast->texture->setWrapS(GL_MIRRORED_REPEAT);
-	wallEast->textureRepeatCountS = 3;
-	wallEast->updateTextureCoordinates();
-	wallEast->position = glm::vec3(7.5f, 0, 0);
-	wallEast->rotation.y = 90;
-	wallEast->scale = glm::vec3(10, 5, 1);
+	portalSurfaces[1].plane = new Plane("wallTexture.jpg");
+	portalSurfaces[1].plane->texture->setWrapS(GL_MIRRORED_REPEAT);
+	portalSurfaces[1].plane->textureRepeatCountS = 3;
+	portalSurfaces[1].plane->updateTextureCoordinates();
+	portalSurfaces[1].plane->position = glm::vec3(7.5f, 0, 0);
+	portalSurfaces[1].plane->normal = glm::vec3(-1, 0, 0);
+	portalSurfaces[1].plane->up = glm::vec3(0, 1, 0);
+	portalSurfaces[1].plane->rotation.y = -90;
+	portalSurfaces[1].plane->scale = glm::vec3(10, 5, 1);
+	portalSurfaces[1].hasPortal = false;
 
-	wallSouth = new Plane("wallTexture.jpg");
-	wallSouth->texture->setWrapS(GL_MIRRORED_REPEAT);
-	wallSouth->textureRepeatCountS = 3;
-	wallSouth->updateTextureCoordinates();
-	wallSouth->position = glm::vec3(0, 0, 5);
-	wallSouth->scale = glm::vec3(15, 5, 1);
+	portalSurfaces[2].plane = new Plane("wallTexture.jpg");
+	portalSurfaces[2].plane->texture->setWrapS(GL_MIRRORED_REPEAT);
+	portalSurfaces[2].plane->textureRepeatCountS = 3;
+	portalSurfaces[2].plane->updateTextureCoordinates();
+	portalSurfaces[2].plane->position = glm::vec3(0, 0, 5);
+	portalSurfaces[2].plane->normal = glm::vec3(0, 0, -1);
+	portalSurfaces[2].plane->up = glm::vec3(0, 1, 0);
+	portalSurfaces[2].plane->rotation.y = 180;
+	portalSurfaces[2].plane->scale = glm::vec3(15, 5, 1);
+	portalSurfaces[2].hasPortal = false;
 
-	wallWest = new Plane("wallTexture.jpg");
-	wallWest->texture->setWrapS(GL_MIRRORED_REPEAT);
-	wallWest->textureRepeatCountS = 3;
-	wallWest->updateTextureCoordinates();
-	wallWest->position = glm::vec3(-7.5f, 0, 0);
-	wallWest->rotation.y = 90;
-	wallWest->scale = glm::vec3(10, 5, 1);
+	portalSurfaces[3].plane = new Plane("wallTexture.jpg");
+	portalSurfaces[3].plane->texture->setWrapS(GL_MIRRORED_REPEAT);
+	portalSurfaces[3].plane->textureRepeatCountS = 3;
+	portalSurfaces[3].plane->updateTextureCoordinates();
+	portalSurfaces[3].plane->position = glm::vec3(-7.5f, 0, 0);
+	portalSurfaces[3].plane->normal = glm::vec3(1, 0, 0);
+	portalSurfaces[3].plane->up = glm::vec3(0, 1, 0);
+	portalSurfaces[3].plane->rotation.y = 90;
+	portalSurfaces[3].plane->scale = glm::vec3(10, 5, 1);
+	portalSurfaces[3].hasPortal = false;
 
-	floor = new Plane("floorTexture.jpg");
-	floor->texture->setWrapS(GL_MIRRORED_REPEAT);
-	floor->texture->setWrapT(GL_MIRRORED_REPEAT);
-	floor->textureRepeatCountS = 3;
-	floor->textureRepeatCountT = 3;
-	floor->updateTextureCoordinates();
-	floor->position = glm::vec3(0, -2.5f, 0);
-	floor->rotation.x = 90;
-	floor->scale = glm::vec3(15, 10, 1);
+	portalSurfaces[4].plane = new Plane("floorTexture.jpg");
+	portalSurfaces[4].plane->texture->setWrapS(GL_MIRRORED_REPEAT);
+	portalSurfaces[4].plane->texture->setWrapT(GL_MIRRORED_REPEAT);
+	portalSurfaces[4].plane->textureRepeatCountS = 4;
+	portalSurfaces[4].plane->textureRepeatCountT = 4;
+	portalSurfaces[4].plane->updateTextureCoordinates();
+	portalSurfaces[4].plane->position = glm::vec3(0, -2.5f, 0);
+	portalSurfaces[4].plane->normal = glm::vec3(0, 1, 0);
+	portalSurfaces[4].plane->up = glm::vec3(0, 0, 1);
+	portalSurfaces[4].plane->rotation.x = -90;
+	portalSurfaces[4].plane->scale = glm::vec3(15, 10, 1);
+	portalSurfaces[4].hasPortal = false;
 
-	ceiling = new Plane("ceilingTexture.jpg");
-	ceiling->texture->setWrapS(GL_MIRRORED_REPEAT);
-	ceiling->texture->setWrapT(GL_MIRRORED_REPEAT);
-	ceiling->textureRepeatCountS = 3;
-	ceiling->textureRepeatCountT = 3;
-	ceiling->updateTextureCoordinates();
-	ceiling->position = glm::vec3(0, 2.5f, 0);
-	ceiling->rotation.x = 90;
-	ceiling->scale = glm::vec3(15, 10, 1);
+	portalSurfaces[5].plane = new Plane("ceilingTexture.jpg");
+	portalSurfaces[5].plane->texture->setWrapS(GL_MIRRORED_REPEAT);
+	portalSurfaces[5].plane->texture->setWrapT(GL_MIRRORED_REPEAT);
+	portalSurfaces[5].plane->textureRepeatCountS = 3;
+	portalSurfaces[5].plane->textureRepeatCountT = 3;
+	portalSurfaces[5].plane->updateTextureCoordinates();
+	portalSurfaces[5].plane->position = glm::vec3(0, 2.5f, 0);
+	portalSurfaces[5].plane->normal = glm::vec3(0, -1, 0);
+	portalSurfaces[5].plane->up = glm::vec3(0, 0, -1);
+	portalSurfaces[5].plane->rotation.x = 90;
+	portalSurfaces[5].plane->scale = glm::vec3(15, 10, 1);
+	portalSurfaces[5].hasPortal = false;
 
 	box = new Cube("objectTexture.jpg");
 	box->position = glm::vec3(-3, -2, -2);
@@ -107,24 +125,10 @@ void Portals::init()
 	player->position = camera->position;
 	player->scale = glm::vec3(0.5f, 0.5f, 0.5f);
 
-	fpa = portal1->position + 0.5f * portal1->scale.y * portal1->up - 0.5f * portal1->scale.x * portal1->right;
-	fpb = portal1->position + 0.5f * portal1->scale.y * portal1->up + 0.5f * portal1->scale.x * portal1->right;
-	fpc = portal1->position - 0.5f * portal1->scale.y * portal1->up + 0.5f * portal1->scale.x * portal1->right;
-
-	spa = portal2->position + 0.5f * portal2->scale.y * portal2->up - 0.5f * portal2->scale.x * portal2->right;
-	spb = portal2->position + 0.5f * portal2->scale.y * portal2->up + 0.5f * portal2->scale.x * portal2->right;
-	spc = portal2->position - 0.5f * portal2->scale.y * portal2->up + 0.5f * portal2->scale.x * portal2->right;
-
 	shader->setUniformVec3("portal1Pos", portal1->position);
 	shader->setUniformVec3("portal2Pos", portal2->position);
 	shader->setUniformVec3("portal1Norm", portal1->normal);
 	shader->setUniformVec3("portal2Norm", portal2->normal);
-	shader->setUniformVec3("fpa", fpa);
-	shader->setUniformVec3("fpb", fpb);
-	shader->setUniformVec3("fpc", fpc);
-	shader->setUniformVec3("spa", spa);
-	shader->setUniformVec3("spb", spb);
-	shader->setUniformVec3("spc", spc);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -156,9 +160,20 @@ void Portals::handleUserInput(GLFWwindow *window, float deltaTime)
 
 	camera->updateFlying(window, deltaTime, mouseOffset);
 
+	handlePlayerMovement();
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		movePortal(portal1);
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+		movePortal(portal2);
+
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+}
 
+void Portals::handlePlayerMovement()
+{
 	glm::vec3 camToFirstPort = camera->position - portal1->position;
 	float firstAngle = glm::dot(camToFirstPort, portal1->normal);
 
@@ -167,6 +182,8 @@ void Portals::handleUserInput(GLFWwindow *window, float deltaTime)
 
 	if (glm::length(camToFirstPort) > 1 && glm::length(camToSecPort) > 1)
 	{
+		/* Keep PLayer inside the box if not close to either portal */
+
 		if (camera->position.x > 7)
 			camera->position.x = 7;
 		if (camera->position.x < -7)
@@ -182,6 +199,8 @@ void Portals::handleUserInput(GLFWwindow *window, float deltaTime)
 	}
 	else
 	{
+		/* Teleport player and adjust look direction when they walk through a portal */
+
 		if (firstAngle < 0 && glm::length(camToFirstPort) <= 1)
 		{
 			glm::vec3 transformedPos1 = portal1->rotationQuaternion * glm::vec4(camera->position - portal1->position, 0);
@@ -201,103 +220,45 @@ void Portals::handleUserInput(GLFWwindow *window, float deltaTime)
 			camera->right = glm::normalize(glm::cross(camera->direction, camera->up));
 		}
 	}
+}
 
-	bool updatePortal1 = false, updatePortal2 = false;
+void Portals::movePortal(Plane* portal)
+{
+	/* Move portal to the position on the wall the player is looking at*/
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-		updatePortal1 = true;
-
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-		updatePortal2 = true;
-
-	if (updatePortal1 || updatePortal2)
+	for (PortalSurface wall : portalSurfaces)
 	{
-		glm::vec3 n[6];
-		n[0] = glm::vec3(1, 0, 0);
-		n[1] = glm::vec3(-1, 0, 0);
-		n[2] = glm::vec3(0, 1, 0);
-		n[3] = glm::vec3(0, -1, 0);
-		n[4] = glm::vec3(0, 0, 1);
-		n[5] = glm::vec3(0, 0, -1);
+		wall.hasPortal = false;
 
-		glm::vec3 p[6];
-		p[0] = glm::vec3(-7.5f, 0, 0);
-		p[1] = glm::vec3(7.5f, 0, 0);
-		p[2] = glm::vec3(0, -2.5f, 0);
-		p[3] = glm::vec3(0, 2.5f, 0);
-		p[4] = glm::vec3(0, 0, -5);
-		p[5] = glm::vec3(0, 0, 5);
+		float nl = glm::dot(wall.plane->normal, camera->direction);
 
-		glm::vec3 q[6];
-		q[0] = glm::vec3(-7.5f, 1, 0);
-		q[1] = glm::vec3(7.5f, 1, 0);
-		q[2] = glm::vec3(0, -2.5f, -1);
-		q[3] = glm::vec3(0, 2.5f, 1);
-		q[4] = glm::vec3(0, 1, -5);
-		q[5] = glm::vec3(0, 1, 5);
-
-		for (int i = 0; i < 6; i++)
+		if (nl != 0)
 		{
-			float nl = glm::dot(n[i], camera->direction);
+			float d = glm::dot(wall.plane->position - camera->position, wall.plane->normal) / nl;
+			glm::vec3 x = d * camera->direction + camera->position;
 
-			if (nl != 0)
+			if (x.x >= -7.5f && x.x <= 7.5f
+				&& x.y >= -2.5f && x.y <= 2.5f
+				&& x.z >= -5 && x.z <= 5
+				&& d >= 0)
 			{
-				float d = glm::dot(p[i] - camera->position, n[i]) / nl;
-				glm::vec3 x = d * camera->direction + camera->position;
+				portal->position = x;
+				portal->normal = wall.plane->normal;
+				portal->up = wall.plane->up;
+				portal->rotationQuaternion = glm::mat4_cast(
+					getRotationQuat(portal->normal, glm::vec3(0, 0, 1), portal->up));
 
-				if (x.x >= -7.5f && x.x <= 7.5f
-					&& x.y >= -2.5f && x.y <= 2.5f
-					&& x.z >= -5 && x.z <= 5
-					&& d >= 0)
-				{
-					if (updatePortal1)
-					{
-						portal1->position = x;
-						portal1->normal = n[i];
-						portal1->up = q[i] - p[i];
-						portal1->rotationQuaternion = glm::mat4_cast(
-							getRotationQuat(portal1->normal, glm::vec3(0, 0, 1), portal1->up));
+				portal->right = -glm::normalize(glm::cross(portal->normal, portal->up));
 
-						portal1->right = -glm::normalize(glm::cross(portal1->normal, portal1->up));
-
-						fpa = portal1->position + 0.5f * portal1->scale.y * portal1->up - 0.5f * portal1->scale.x * portal1->right;
-						fpb = portal1->position + 0.5f * portal1->scale.y * portal1->up + 0.5f * portal1->scale.x * portal1->right;
-						fpc = portal1->position - 0.5f * portal1->scale.y * portal1->up + 0.5f * portal1->scale.x * portal1->right;
-
-						shader->setUniformVec3("portal1Pos", portal1->position);
-						shader->setUniformVec3("portal1Norm", portal1->normal);
-						shader->setUniformVec3("fpa", fpa);
-						shader->setUniformVec3("fpb", fpb);
-						shader->setUniformVec3("fpc", fpc);
-
-						break;
-					}
-					else if (updatePortal2)
-					{
-						portal2->position = x;
-						portal2->normal = n[i];
-						portal2->up = q[i] - p[i];
-						portal2->rotationQuaternion = glm::mat4_cast(
-							getRotationQuat(portal2->normal, glm::vec3(0, 0, 1), portal2->up));
-
-						portal2->right = -glm::normalize(glm::cross(portal2->normal, portal2->up));
-
-						spa = portal2->position + 0.5f * portal2->scale.y * portal2->up - 0.5f * portal2->scale.x * portal2->right;
-						spb = portal2->position + 0.5f * portal2->scale.y * portal2->up + 0.5f * portal2->scale.x * portal2->right;
-						spc = portal2->position - 0.5f * portal2->scale.y * portal2->up + 0.5f * portal2->scale.x * portal2->right;
-
-						shader->setUniformVec3("portal2Pos", portal2->position);
-						shader->setUniformVec3("portal2Norm", portal2->normal);
-						shader->setUniformVec3("spa", spa);
-						shader->setUniformVec3("spb", spb);
-						shader->setUniformVec3("spc", spc);
-
-						break;
-					}
-				}
+				wall.hasPortal = true;
 			}
 		}
 	}
+
+	shader->setUniformVec3("portal1Pos", portal1->position);
+	shader->setUniformVec3("portal1Norm", portal1->normal);
+	shader->setUniformVec3("portal2Pos", portal2->position);
+	shader->setUniformVec3("portal2Norm", portal2->normal);
 }
 
 glm::quat Portals::getRotationQuat(glm::vec3 v1, glm::vec3 v2, glm::vec3 perp)
@@ -325,127 +286,101 @@ glm::quat Portals::getRotationQuat(glm::vec3 v1, glm::vec3 v2, glm::vec3 perp)
 
 void Portals::draw()
 {
-	//save camera
-	glm::vec3 camPos1 = camera->position;
-	glm::vec3 camDir1 = camera->direction;
-	glm::vec3 camUp1 = camera->up;
+	Camera* cam1 = new Camera(screenWidth, screenHeight);
+	cam1->position = camera->position;
+	cam1->direction = camera->direction;
+	cam1->up = camera->up;
 
-	glm::vec3 camPos2 = camera->position;
-	glm::vec3 camDir2 = camera->direction;
-	glm::vec3 camUp2 = camera->up;
+	Camera* cam2 = new Camera(screenWidth, screenHeight);
+	cam2->position = camera->position;
+	cam2->direction = camera->direction;
+	cam2->up = camera->up;
 
-	view = glm::lookAt(camPos2, camPos2 + camDir2, camUp2);
+	for (int i = 0; i < portalDepth; i++)
+	{
+		int j = i + portalDepth;
+
+		if (i == 0)
+		{
+			view = glm::lookAt(camera->position, camera->position + camera->direction, camera->up);
+			shader->setUniformMat4("view", view);
+
+			glStencilMask(0xFF);
+			glClear(GL_STENCIL_BUFFER_BIT);
+
+			glStencilOp(GL_KEEP, GL_REPLACE, GL_KEEP);
+
+			glDepthFunc(GL_NEVER);
+
+			glStencilFunc(GL_ALWAYS, i + 1, 0xFF);
+			portal2->draw(shader);
+
+			glStencilFunc(GL_ALWAYS, j + 1, 0xFF);
+			portal1->draw(shader);
+
+			glDepthFunc(GL_LESS);
+
+			glStencilMask(0x00);
+			glStencilFunc(GL_EQUAL, 0, 0xFF);
+
+			for (PortalSurface wall : portalSurfaces)
+				wall.plane->draw(shader);
+
+			glStencilFunc(GL_ALWAYS, 0, 0xFF);
+			box->draw(shader);
+			tower->draw(shader);
+
+			glStencilOp(GL_KEEP, GL_INCR, GL_KEEP);
+		}
+		else
+		{
+			drawPortalContents(i, portal1, portal2, cam1, 0);
+			drawPortalContents(j, portal2, portal1, cam2, 1);
+		}
+	}
+
+	delete cam1;
+	delete cam2;
+}
+
+void Portals::drawPortalContents(int i, Plane* port1, Plane* port2, Camera* cam, int clip)
+{
+	glm::vec3 transformedPos = port2->rotationQuaternion * glm::vec4(cam->position - port2->position, 0);
+	glm::vec3 transformedDir = port2->rotationQuaternion * glm::vec4(cam->direction, 0);
+	glm::vec3 transformedUp = port2->rotationQuaternion * glm::vec4(cam->up, 0);
+
+	cam->position = port1->position - transformedPos.x * port1->right + transformedPos.y * port1->up - transformedPos.z * port1->normal;
+	cam->direction = -transformedDir.x * port1->right + transformedDir.y * port1->up - transformedDir.z * port1->normal;
+	cam->up = -transformedUp.x * port1->right + transformedUp.y * port1->up - transformedUp.z * port1->normal;
+
+	view = glm::lookAt(cam->position, cam->position + cam->direction, cam->up);
 	shader->setUniformMat4("view", view);
 
-	glClear(GL_STENCIL_BUFFER_BIT);
+	glStencilMask(0xFF);
+	glStencilFunc(GL_EQUAL, i, 0xFF);
+	glDepthFunc(GL_NEVER);
+
+	port2->draw(shader);
+
+	glDepthFunc(GL_LESS);
 
 	glStencilMask(0x00);
-	glStencilFunc(GL_EQUAL, 0, 0xFF);
+	glStencilFunc(GL_EQUAL, i, 0xFF);
 
-	wallNorth->draw(shader);
-	wallEast->draw(shader);
-	wallSouth->draw(shader);
-	wallWest->draw(shader);
-	floor->draw(shader);
-	ceiling->draw(shader);
+	glEnable(GL_CLIP_DISTANCE0 + clip);
+
+	for (PortalSurface wall : portalSurfaces)
+		wall.plane->draw(shader);
+
+	glStencilFunc(GL_EQUAL, i, 0xFF);
 	box->draw(shader);
 	tower->draw(shader);
 
-	glStencilMask(0xFF);
-	glStencilFunc(GL_ALWAYS, 1, 0xFF);
-	glDepthMask(GL_FALSE);
+	glStencilFunc(GL_EQUAL, i + 1, 0xFF);
+	box->draw(shader);
+	tower->draw(shader);
 
-	portal2->draw(shader);
-
-	glDepthMask(GL_TRUE);
-
-	for (int i = 1; i <= portalDepth; i++)
-	{
-		glm::vec3 transformedPos2 = portal2->rotationQuaternion * glm::vec4(camPos2 - portal2->position, 0);
-		camPos2 = portal1->position - transformedPos2.x * portal1->right + transformedPos2.y * portal1->up - transformedPos2.z * portal1->normal;
-		glm::vec3 transformedDir2 = portal2->rotationQuaternion * glm::vec4(camDir2, 0);
-		camDir2 = -transformedDir2.x * portal1->right + transformedDir2.y * portal1->up - transformedDir2.z * portal1->normal;
-		glm::vec3 transformedUp2 = portal2->rotationQuaternion * glm::vec4(camUp2, 0);
-		camUp2 = -transformedUp2.x * portal1->right + transformedUp2.y * portal1->up - transformedUp2.z * portal1->normal;
-
-		view = glm::lookAt(camPos2, camPos2 + camDir2, camUp2);
-		shader->setUniformMat4("view", view);
-
-		glStencilMask(0x00);
-		glStencilFunc(GL_EQUAL, i, 0xFF);
-
-		glEnable(GL_CLIP_DISTANCE0);
-
-		wallNorth->draw(shader);
-		wallEast->draw(shader);
-		wallSouth->draw(shader);
-		wallWest->draw(shader);
-		floor->draw(shader);
-		ceiling->draw(shader);
-		box->draw(shader);
-		tower->draw(shader);
-
-		glDisable(GL_CLIP_DISTANCE0);
-
-		glStencilMask(0xFF);
-		glDepthMask(GL_FALSE);
-		glStencilFunc(GL_EQUAL, i, 0xFF);
-
-		portal2->draw(shader);
-
-		glDepthMask(GL_TRUE);
-	}
-
-	view = glm::lookAt(camPos1, camPos1 + camDir1, camUp1);
-	shader->setUniformMat4("view", view);
-
-	glClear(GL_STENCIL_BUFFER_BIT);
-
-	glStencilMask(0xFF);
-	glStencilFunc(GL_ALWAYS, 1, 0xFF);
-	glDepthMask(GL_FALSE);
-
-	portal1->draw(shader);
-
-	glDepthMask(GL_TRUE);
-
-	for (int i = 1; i <= portalDepth; i++)
-	{
-		//transform camera
-		glm::vec3 transformedPos1 = portal1->rotationQuaternion * glm::vec4(camPos1 - portal1->position, 0);
-		camPos1 = portal2->position - transformedPos1.x * portal2->right + transformedPos1.y * portal2->up - transformedPos1.z * portal2->normal;
-		glm::vec3 transformedDir1 = portal1->rotationQuaternion * glm::vec4(camDir1, 0);
-		camDir1 = -transformedDir1.x * portal2->right + transformedDir1.y * portal2->up - transformedDir1.z * portal2->normal;
-		glm::vec3 transformedUp1 = portal1->rotationQuaternion * glm::vec4(camUp1, 0);
-		camUp1 = -transformedUp1.x * portal2->right + transformedUp1.y * portal2->up - transformedUp1.z * portal2->normal;
-
-		view = glm::lookAt(camPos1, camPos1 + camDir1, camUp1);
-		shader->setUniformMat4("view", view);
-
-		glStencilMask(0x00);
-		glStencilFunc(GL_EQUAL, i, 0xFF);
-
-		glEnable(GL_CLIP_DISTANCE1);
-
-		wallNorth->draw(shader);
-		wallEast->draw(shader);
-		wallSouth->draw(shader);
-		wallWest->draw(shader);
-		floor->draw(shader);
-		ceiling->draw(shader);
-		box->draw(shader);
-		tower->draw(shader);
-
-		glDisable(GL_CLIP_DISTANCE1);
-
-		glStencilMask(0xFF);
-		glDepthMask(GL_FALSE);
-		glStencilFunc(GL_EQUAL, i, 0xFF);
-
-		portal1->draw(shader);
-
-		glDepthMask(GL_TRUE);
-	}
+	glDisable(GL_CLIP_DISTANCE0 + clip);
 }
 
 Portals::~Portals()

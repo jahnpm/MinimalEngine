@@ -13,18 +13,12 @@ void main()
 {
 	vec4 color;
 
-	if (texID > -0.5 && texID < 0.5)
-	{
+	if (texID == 0.0)
 		color = texture(texture0, texCoord);
-	}
-	else if (texID > 0.5 && texID < 1.5)
-	{
+	else if (texID == 1.0)
 		color = texture(texture1, texCoord);
-	}
-	else if (texID > 1.5 && texID < 2.5)
-	{
+	else if (texID == 2.0)
 		color = texture(texture2, texCoord);
-	}
 
 	FragColor = color;
 }
