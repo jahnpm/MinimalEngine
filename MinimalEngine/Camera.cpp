@@ -10,8 +10,8 @@ Camera::Camera(float screenWidth, float screenHeight)
 
 	fov = 45.0f;
 	aspectRatio = screenWidth / screenHeight;
-	nearClip = 0.0001f;
-	farClip = 170.0f;
+	nearClip = 0.1f;
+	farClip = 100.0f;
 
 	speed = 7.5f;
 }
@@ -22,10 +22,10 @@ void Camera::updateFlying(GLFWwindow *window, float deltaTime, glm::vec2 deltaMo
 	float yAngle = 0.1f * deltaMouse.x * deltaTime;
 
 	if (rotation.x + xAngle > glm::radians(89.0f))
-		xAngle = glm::radians(89.0f) - rotation.x;
+		//xAngle = glm::radians(89.0f) - rotation.x;
 
 	if (rotation.x + xAngle < glm::radians(-89.0f))
-		xAngle = glm::radians(-89.0f) - rotation.x;
+		//xAngle = glm::radians(-89.0f) - rotation.x;
 
 	rotation.x += xAngle;
 	rotation.y += yAngle;

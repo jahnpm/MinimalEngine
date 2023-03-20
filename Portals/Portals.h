@@ -25,6 +25,8 @@ private:
 	void update();
 	void draw();
 	void drawPortalContents(int i, Plane* portal1, Plane* portal2, Camera* cam, int clip);
+	void drawPortalOutline(Plane* p, Shader* s);
+
 	void handleUserInput(GLFWwindow *window, float deltaTime);
 	void handlePlayerMovement();
 	void movePortal(Plane* portal);
@@ -37,12 +39,16 @@ private:
 	glm::mat4 view;
 	glm::mat4 projection;
 
-	Shader *shader;
-	Cube *box, *tower, *player;
-	Camera *camera;
+	Shader* shader;
 
-	Plane *portal1, *portal2;
+	Camera* camera;
+	Camera* cam1;
+	Camera* cam2;
+
+	Plane* portal1, * portal2;
 	PortalSurface portalSurfaces[6];
+
+	Cube* box, * tower, * player;
 
 	int portalDepth;
 };

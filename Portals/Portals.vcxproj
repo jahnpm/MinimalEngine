@@ -30,15 +30,15 @@
     <None Include="portalsvs.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="ceilingTexture.jpg" />
-    <Image Include="floorTexture.jpg" />
-    <Image Include="objectTexture.jpg" />
-    <Image Include="wallTexture.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MinimalEngine\MinimalEngine.vcxproj">
       <Project>{b3086c37-9809-41a8-9ddc-95f0072d9f62}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ceilingTexture.jpg" />
+    <Image Include="floorTexture.jpg" />
+    <Image Include="objectTexture.png" />
+    <Image Include="wallTexture.jpg" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -39,16 +39,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="floorTexture.jpg">
-      <Filter>Ressourcendateien</Filter>
-    </Image>
-    <Image Include="wallTexture.jpg">
-      <Filter>Ressourcendateien</Filter>
-    </Image>
     <Image Include="ceilingTexture.jpg">
       <Filter>Ressourcendateien</Filter>
     </Image>
-    <Image Include="objectTexture.jpg">
+    <Image Include="floorTexture.jpg">
+      <Filter>Ressourcendateien</Filter>
+    </Image>
+    <Image Include="objectTexture.png">
+      <Filter>Ressourcendateien</Filter>
+    </Image>
+    <Image Include="wallTexture.jpg">
       <Filter>Ressourcendateien</Filter>
     </Image>
   </ItemGroup>
