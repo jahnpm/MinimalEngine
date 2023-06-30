@@ -3,9 +3,9 @@
 
 Portals::Portals()
 {
-	screenWidth = 1920;
-	screenHeight = 1080;
-	fullScreen = false;
+	screenWidth = 2560;
+	screenHeight = 1440;
+	fullScreen = true;
 	vsync = 0;
 }
 
@@ -217,19 +217,19 @@ void Portals::handlePlayerMovement()
 		if (firstAngle < 0 && glm::length(camToFirstPort) <= 1)
 		{
 			glm::vec3 transformedPos1 = portal1->rotationQuaternion * glm::vec4(camera->position - portal1->position, 0);
-			camera->position = portal2->position - transformedPos1.x * portal2->right + transformedPos1.y * portal2->up - transformedPos1.z * portal2->normal;
 			glm::vec3 transformedDir1 = portal1->rotationQuaternion * glm::vec4(camera->direction, 0);
-			camera->direction = -transformedDir1.x * portal2->right + transformedDir1.y * portal2->up - transformedDir1.z * portal2->normal;
 
+			camera->position = portal2->position - transformedPos1.x * portal2->right + transformedPos1.y * portal2->up - transformedPos1.z * portal2->normal;
+			camera->direction = -transformedDir1.x * portal2->right + transformedDir1.y * portal2->up - transformedDir1.z * portal2->normal;
 			camera->right = glm::normalize(glm::cross(camera->direction, camera->up));
 		}
 		else if (secondAngle < 0 && glm::length(camToSecPort) <= 1)
 		{
 			glm::vec3 transformedPos2 = portal2->rotationQuaternion * glm::vec4(camera->position - portal2->position, 0);
-			camera->position = portal1->position - transformedPos2.x * portal1->right + transformedPos2.y * portal1->up - transformedPos2.z * portal1->normal;
 			glm::vec3 transformedDir2 = portal2->rotationQuaternion * glm::vec4(camera->direction, 0);
-			camera->direction = -transformedDir2.x * portal1->right + transformedDir2.y * portal1->up - transformedDir2.z * portal1->normal;
 
+			camera->position = portal1->position - transformedPos2.x * portal1->right + transformedPos2.y * portal1->up - transformedPos2.z * portal1->normal;
+			camera->direction = -transformedDir2.x * portal1->right + transformedDir2.y * portal1->up - transformedDir2.z * portal1->normal;
 			camera->right = glm::normalize(glm::cross(camera->direction, camera->up));
 		}
 	}
